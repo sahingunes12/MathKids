@@ -1,58 +1,49 @@
 import 'package:flutter/material.dart';
 
-/// Dashboard-specific theme: modern, clean look (Figma-style).
-/// Distinct from the rest of the app for a fresh dashboard feel.
-class DashboardTheme {
-  DashboardTheme._();
+abstract class DashboardTheme {
+  // ### Colors
+  // --- Core Palette
+  static const Color primary = Color(0xFF6EC6FF);
+  static const Color primaryLight = Color(0xFF82D3FF);
+  static const Color primaryDark = Color(0xFF165C96);
+  static const Color surface = Color(0xFFF3F8FF);
+  static const Color surfaceGradientStart = Color(0xFFF3F8FF);
+  static const Color surfaceGradientEnd = Color(0xFFE8F3FF);
+  static const Color cardBg = Colors.white;
+  static const Color cardBorder = Color(0xFFE0E8F3);
+  static const Color textPrimary = Color(0xFF264C66);
+  static const Color textSecondary = Color(0xFF7593B0);
+  static const Color textOnPrimary = Colors.white;
 
-  // Background
-  static const Color surface = Color(0xFFF8FAFC);
-  static const Color surfaceGradientStart = Color(0xFFF1F5F9);
-  static const Color surfaceGradientEnd = Color(0xFFE2E8F0);
+  // --- Accent Palette
+  static const Color accentShop = Color(0xFFFFA726);
+  static const Color accentStats = Color(0xFF5C6BC0);
+  static const Color accentTimeAttack = Color(0xFFEF5350);
+  static const Color accentMistakes = Color(0xFF8D6E63);
+  static const Color chipLevel = Color(0xFF42A5F5);
+  static const Color chipStreak = Color(0xFFFF7043);
 
-  // Cards & surfaces
-  static const Color cardBg = Color(0xFFFFFFFF);
-  static const Color cardBorder = Color(0xFFE2E8F0);
+  // ### Dimensions
+  // --- Radii
+  static const double radiusSm = 8;
+  static const double radiusMd = 12;
+  static const double radiusLg = 16;
+  static const double radiusXl = 24;
 
-  // Brand / primary
-  static const Color primary = Color(0xFF6366F1);
-  static const Color primaryLight = Color(0xFF818CF8);
-  static const Color primaryDark = Color(0xFF4F46E5);
-
-  // Accents for actions
-  static const Color accentShop = Color(0xFFF43F5E);
-  static const Color accentStats = Color(0xFF0EA5E9);
-  static const Color accentTimeAttack = Color(0xFFF59E0B);
-  static const Color accentMistakes = Color(0xFFEF4444);
-
-  // Text
-  static const Color textPrimary = Color(0xFF0F172A);
-  static const Color textSecondary = Color(0xFF64748B);
-  static const Color textOnPrimary = Color(0xFFFFFFFF);
-
-  // Chips / badges
-  static const Color chipLevel = Color(0xFF6366F1);
-  static const Color chipStreak = Color(0xFFF97316);
-
-  // Radii
-  static const double radiusSm = 12.0;
-  static const double radiusMd = 16.0;
-  static const double radiusLg = 24.0;
-  static const double radiusXl = 28.0;
-
-  // Shadows
-  static List<BoxShadow> cardShadow = [
+  // ### Shadows
+  static final List<BoxShadow> cardShadow = [
     BoxShadow(
-      color: const Color(0xFF0F172A).withOpacity(0.06),
-      blurRadius: 16,
-      offset: const Offset(0, 4),
+      color: primaryDark.withAlpha(25),
+      blurRadius: 24,
+      offset: const Offset(0, 8),
     ),
   ];
+
   static List<BoxShadow> buttonShadow(Color color) => [
         BoxShadow(
-          color: color.withOpacity(0.35),
-          blurRadius: 12,
-          offset: const Offset(0, 4),
+          color: color.withAlpha(50),
+          blurRadius: 16,
+          offset: const Offset(0, 8),
         ),
       ];
 }

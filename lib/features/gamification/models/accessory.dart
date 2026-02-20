@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+enum AccessoryCategory { hats, glasses, capes }
+
 class Accessory {
   final String id;
   final String name;
   final String imagePath;
   final int price;
   final IconData icon;
+  final AccessoryCategory category;
 
   const Accessory({
     required this.id,
@@ -13,6 +16,7 @@ class Accessory {
     required this.imagePath,
     required this.price,
     required this.icon,
+    required this.category,
   });
 }
 
@@ -23,6 +27,7 @@ const List<Accessory> allAccessories = [
     imagePath: 'assets/accessories/sunglasses.png',
     price: 50,
     icon: Icons.wb_sunny_rounded,
+    category: AccessoryCategory.glasses,
   ),
   Accessory(
     id: 'wizard_hat',
@@ -30,6 +35,7 @@ const List<Accessory> allAccessories = [
     imagePath: 'assets/accessories/wizard_hat.png',
     price: 100,
     icon: Icons.auto_fix_high_rounded,
+    category: AccessoryCategory.hats,
   ),
   Accessory(
     id: 'party_hat',
@@ -37,6 +43,7 @@ const List<Accessory> allAccessories = [
     imagePath: 'assets/accessories/party_hat.png',
     price: 75,
     icon: Icons.celebration_rounded,
+    category: AccessoryCategory.hats,
   ),
   Accessory(
     id: 'hero_cape',
@@ -44,5 +51,6 @@ const List<Accessory> allAccessories = [
     imagePath: 'assets/accessories/cape.png',
     price: 150,
     icon: Icons.shield_rounded,
+    category: AccessoryCategory.capes,
   ),
 ];

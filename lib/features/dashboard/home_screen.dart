@@ -54,6 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     debugPrint('🏠 HomeScreen: build called');
     debugLog('home_screen.dart:build', 'HomeScreen building', {}, hypothesisId: 'H5');
     final progress = ref.watch(gamificationServiceProvider);
+    final totalStars = progress.totalStars;
 
     return FeedbackOverlay(
       confettiController: _confettiController,
@@ -110,7 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
                         final module = allModules[index];
-                        final isUnlocked = progress.unlockedModules.contains(module.id);
+                        final isUnlocked = totalStars >= module.requiredStars;
                         return _DashboardModuleCard(
                           module: module,
                           isUnlocked: isUnlocked,
@@ -348,9 +349,9 @@ class _DashboardChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(DashboardTheme.radiusSm),
-        border: Border.all(color: color.withOpacity(0.25)),
+        border: Border.all(color: color.withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -448,7 +449,7 @@ class _DashboardGameCard extends StatelessWidget {
             Positioned(
               right: -4,
               bottom: -4,
-              child: Icon(icon, size: 64, color: Colors.white.withOpacity(0.2)),
+              child: Icon(icon, size: 64, color: Colors.white.withAlpha(40)),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -460,7 +461,7 @@ class _DashboardGameCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.25),
+                        color: Colors.white.withAlpha(50),
                         borderRadius: BorderRadius.circular(DashboardTheme.radiusSm),
                       ),
                       child: Icon(icon, color: Colors.white, size: 24),
@@ -511,7 +512,7 @@ class _DashboardModuleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bgColor = isUnlocked ? DashboardTheme.cardBg : DashboardTheme.surface;
-    final borderColor = isUnlocked ? DashboardTheme.cardBorder : DashboardTheme.cardBorder.withOpacity(0.6);
+    final borderColor = isUnlocked ? DashboardTheme.cardBorder : DashboardTheme.cardBorder.withAlpha(150);
     final iconColor = isUnlocked ? module.color : DashboardTheme.textSecondary;
 
     return BouncyButton(
@@ -534,7 +535,7 @@ class _DashboardModuleCard extends StatelessWidget {
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: iconColor.withOpacity(0.12),
+                    color: iconColor.withAlpha(30),
                     borderRadius: BorderRadius.circular(DashboardTheme.radiusMd),
                   ),
                 ),
@@ -557,6 +558,24 @@ class _DashboardModuleCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (!isUnlocked && module.requiredStars > 0) ...[
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.star_rounded, size: 16, color: DashboardTheme.accentShop.withAlpha(180)),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${module.requiredStars}',
+                    style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: DashboardTheme.textSecondary,
+                    ),
+                  ),
+                ],
+              )
+            ]
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'exercise.dart';
 
 class LearningModule {
@@ -30,7 +31,7 @@ final List<LearningModule> allModules = [
     id: 'addition_easy',
     title: 'Modül 1: Sayılar',
     subtitle: '10\'a kadar Toplama',
-    icon: Icons.cookie_rounded, // 🍪
+    icon: PhosphorIconsRegular.pencilLine,
     color: Color(0xFFFFB74D), // Orange
     exerciseType: ExerciseType.addition,
     maxNumber: 10,
@@ -41,10 +42,10 @@ final List<LearningModule> allModules = [
     id: 'subtraction_easy',
     title: 'Modül 2: Çıkarma',
     subtitle: '10\'a kadar Çıkarma',
-    icon: Icons.bolt_rounded, // ⚡
+    icon: PhosphorIconsRegular.minus,
     color: Color(0xFFFF5252), // Red Accent
     exerciseType: ExerciseType.subtraction,
-    maxNumber: 10,
+  maxNumber: 10,
     starsPerCorrect: 1,
     requiredStars: 10,
   ),
@@ -52,7 +53,7 @@ final List<LearningModule> allModules = [
     id: 'addition_hard',
     title: 'Modül 3: Büyük Sayılar',
     subtitle: '20\'ye kadar Toplama',
-    icon: Icons.widgets_rounded, // 🧱
+    icon: PhosphorIconsRegular.plus,
     color: Color(0xFF66BB6A), // Green
     exerciseType: ExerciseType.addition,
     maxNumber: 20,
@@ -63,7 +64,7 @@ final List<LearningModule> allModules = [
     id: 'multiplication_easy',
     title: 'Modül 4: Çarpma',
     subtitle: 'Çarpım Tablosu (Kolay)',
-    icon: Icons.star_rounded, // ⭐
+    icon: PhosphorIconsRegular.x,
     color: Color(0xFFE040FB), // Purple Accent
     exerciseType: ExerciseType.multiplication,
     maxNumber: 10,
@@ -71,10 +72,10 @@ final List<LearningModule> allModules = [
     requiredStars: 50,
   ),
   const LearningModule(
-    id: 'division_easy', 
+    id: 'division_easy',
     title: 'Modül 5: Bölme',
     subtitle: 'Bölme İşlemi (Kolay)',
-    icon: Icons.pie_chart_rounded, // 🍕
+    icon: PhosphorIconsRegular.divide,
     color: Color(0xFFFF4081), // Pink Accent
     exerciseType: ExerciseType.division,
     maxNumber: 20,
@@ -86,7 +87,7 @@ final List<LearningModule> allModules = [
     id: 'counting_easy',
     title: 'Anaokulu: Sayma',
     subtitle: 'Kaç tane var?',
-    icon: Icons.pets_rounded, // 🐾
+    icon: PhosphorIconsRegular.numberOne,
     color: Color(0xFF009688), // Teal
     exerciseType: ExerciseType.counting,
     maxNumber: 5,
@@ -97,7 +98,7 @@ final List<LearningModule> allModules = [
     id: 'shapes_basic',
     title: 'Anaokulu: Şekiller',
     subtitle: 'Şekilleri Tanı',
-    icon: Icons.emoji_objects_rounded, // 💡
+    icon: PhosphorIconsRegular.shapes,
     color: Color(0xFFFFAB00), // Amber Accent
     exerciseType: ExerciseType.shapes,
     maxNumber: 4,
@@ -108,7 +109,7 @@ final List<LearningModule> allModules = [
     id: 'multiplication_hard',
     title: 'Modül 6: Usta Çarpma',
     subtitle: 'Çarpım Tablosu (Zor)',
-    icon: Icons.diamond_rounded, // 💎
+    icon: PhosphorIconsFill.xCircle,
     color: Color(0xFF3D5AFE), // Indigo Accent
     exerciseType: ExerciseType.multiplication,
     maxNumber: 20,

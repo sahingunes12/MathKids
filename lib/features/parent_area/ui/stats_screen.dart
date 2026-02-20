@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../../../app/theme/colors.dart';
 import '../../../app/theme/text_styles.dart';
 import '../../../core/widgets/cloud_card.dart';
@@ -14,9 +15,6 @@ class StatsScreen extends ConsumerWidget {
     final progress = ref.watch(gamificationServiceProvider);
     final profileIds = ref.watch(profileServiceProvider);
     final profileNotifier = ref.read(profileServiceProvider.notifier);
-
-    final total = progress.totalCorrect + progress.totalWrong;
-    final accuracy = total > 0 ? (progress.totalCorrect / total * 100).toStringAsFixed(1) : '0';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -35,53 +33,52 @@ class StatsScreen extends ConsumerWidget {
               Text(progress.name, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
             ],
             const SizedBox(height: 24),
-            
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    title: 'Doğru',
-                    value: '${progress.totalCorrect}',
-                    color: AppColors.correct,
-                    icon: Icons.check_circle_rounded,
-                  ),
+            SizedBox(
+              height: 180,
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    PieChartSectionData(
+                      color: AppColors.correct,
+                      value: progress.totalCorrect.toDouble(),
+                      title: '${progress.totalCorrect}',
+                      radius: 80,
+                      titleStyle: AppTextStyles.h2.copyWith(color: Colors.white),
+                    ),
+                    PieChartSectionData(
+                      color: AppColors.wrong,
+                      value: progress.totalWrong.toDouble(),
+                      title: '${progress.totalWrong}',
+                      radius: 80,
+                      titleStyle: AppTextStyles.h2.copyWith(color: Colors.white),
+                    ),
+                  ],
+                  centerSpaceRadius: 0,
+                  sectionsSpace: 2,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _StatCard(
-                    title: 'Yanlış',
-                    value: '${progress.totalWrong}',
-                    color: AppColors.wrong,
-                    icon: Icons.cancel_rounded,
-                  ),
-                ),
-              ],
-            ),
-            
-            const SizedBox(height: 24),
-            
-            CloudCard(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Başarı Oranı', style: AppTextStyles.h3),
-                      Text('%$accuracy', style: AppTextStyles.h1.copyWith(color: AppColors.primary)),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  LinearProgressIndicator(
-                    value: total > 0 ? (progress.totalCorrect / total) : 0,
-                    backgroundColor: AppColors.background,
-                    color: AppColors.primary,
-                    minHeight: 12,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                ],
               ),
             ),
-
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Container(width: 12, height: 12, color: AppColors.correct),
+                    const SizedBox(width: 8),
+                    Text('Doğru', style: AppTextStyles.bodyMedium)
+                  ],
+                ),
+                const SizedBox(width: 24),
+                Row(
+                  children: [
+                    Container(width: 12, height: 12, color: AppColors.wrong),
+                    const SizedBox(width: 8),
+                    Text('Yanlış', style: AppTextStyles.bodyMedium)
+                  ],
+                )
+              ],
+            ),
             if (profileIds.isNotEmpty) ...[
               const SizedBox(height: 32),
               Text('Tüm Profiller', style: AppTextStyles.h1),
@@ -97,7 +94,7 @@ class StatsScreen extends ConsumerWidget {
                     child: Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: AppColors.accent.withValues(alpha: 0.2),
+                          backgroundColor: AppColors.accent.withAlpha(50),
                           child: Text(
                             data.name.isNotEmpty ? data.name.substring(0, 1).toUpperCase() : '?',
                             style: AppTextStyles.h3.copyWith(color: AppColors.accent),
@@ -120,9 +117,7 @@ class StatsScreen extends ConsumerWidget {
                 );
               }),
             ],
-            
             const SizedBox(height: 48),
-            
             Center(
               child: Text(
                 'Harika gidiyorsun! 🎉\nÇocuğunuzun gelişimi güvende.',
@@ -132,34 +127,6 @@ class StatsScreen extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color color;
-  final IconData icon;
-
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.color,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CloudCard(
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 32),
-          const SizedBox(height: 12),
-          Text(value, style: AppTextStyles.h1),
-          Text(title, style: AppTextStyles.bodyMedium),
-        ],
       ),
     );
   }
