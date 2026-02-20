@@ -158,8 +158,9 @@ class _MistakeReviewScreenState extends ConsumerState<MistakeReviewScreen> {
                    final isSelected = _selectedAnswer == choice;
                    Color color = Colors.white;
                    if (_isAnswered) {
-                     if (choice == exercise.correctAnswer) color = AppColors.correct;
-                     else if (isSelected) color = AppColors.wrong;
+                     if (choice == exercise.correctAnswer) {
+                       color = AppColors.correct;
+                     } else if (isSelected) color = AppColors.wrong;
                    }
                    
                    return BouncyButton(

@@ -175,7 +175,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               borderRadius: BorderRadius.circular(DashboardTheme.radiusMd),
               boxShadow: DashboardTheme.cardShadow,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.tune_rounded,
               color: DashboardTheme.textSecondary,
               size: 22,
@@ -216,9 +216,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           Container(
             padding: const EdgeInsets.all(3),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 colors: [DashboardTheme.primaryLight, DashboardTheme.primaryDark],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,

@@ -63,10 +63,10 @@ class ExerciseGenerator {
 
     while (choices.length < 4) {
       if (module.exerciseType == ExerciseType.counting) {
-         int wrong = _random.nextInt(module.maxNumber) + 1;
+         final int wrong = _random.nextInt(module.maxNumber) + 1;
          if (wrong != answer) choices.add(wrong);
       } else if (module.exerciseType == ExerciseType.shapes) {
-         int wrong = _random.nextInt(4);
+         final int wrong = _random.nextInt(4);
          choices.add(wrong);
       } else {
         // ... existing logic for numbers
