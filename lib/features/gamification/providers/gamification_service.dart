@@ -164,5 +164,37 @@ class GamificationService extends _$GamificationService {
     );
     await _saveProgress(newProgress);
   }
+  Future<void> toggleSound() async {
+    final newProgress = state.copyWith(isSoundEnabled: !state.isSoundEnabled);
+    await _saveProgress(newProgress);
+  }
+
+  Future<void> recordMistake(Map<String, dynamic> mistakeData) async {
+    // Avoid duplicates based on question text or ID if available. 
+    // tailored to store minimum data: operandA, operandB, type, answer
+    final existing = state.mistakes.any((m) => 
+      m['a'] == mistakeData['a'] && 
+      m['b'] == mistakeData['b'] && 
+      m['type'] == mistakeData['type']
+    );
+
+    if (!existing) {
+      final newMistakes = List<Map<String, dynamic>>.from(state.mistakes)..add(mistakeData);
+      final newProgress = state.copyWith(mistakes: newMistakes);
+      await _saveProgress(newProgress);
+    }
+  }
+
+  Future<void> clearMistake(Map<String, dynamic> mistakeData) async {
+    final newMistakes = List<Map<String, dynamic>>.from(state.mistakes);
+    newMistakes.removeWhere((m) => 
+      m['a'] == mistakeData['a'] && 
+      m['b'] == mistakeData['b'] && 
+      m['type'] == mistakeData['type']
+    );
+    
+    final newProgress = state.copyWith(mistakes: newMistakes);
+    await _saveProgress(newProgress);
+  }
 }
 

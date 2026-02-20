@@ -1,0 +1,96 @@
+Warning: Building for device with codesigning disabled. You will have to manually codesign before deploying to device.
+Building com.rechenwelt.rechenWelt for device (ios-release)...
+Running Xcode build...                                          
+lib/features/learning/ui/mistake_review_screen.dart:83:20: Error: Constant evaluation error:
+Xcode build done.                                            4.4s
+Failed to build iOS app
+Error output from Xcode build:
+↳
+    ** BUILD FAILED **
+
+
+Xcode's output:
+↳
+    Writing result bundle at path:
+    	/var/folders/mr/c122_w_53hbc01pzvn18xp0m0000gn/T/flutter_tools.rnxM8m/flutter_ios_build_temp_dirRLf3EC/temporary_xcresult_bundle
+
+    lib/features/settings/ui/settings_dialog.dart:4:8: Error: Error when reading 'lib/features/app/theme/colors.dart': No such file or directory
+    import '../../app/theme/colors.dart';
+           ^
+    lib/features/settings/ui/settings_dialog.dart:5:8: Error: Error when reading 'lib/features/app/theme/text_styles.dart': No such file or directory
+    import '../../app/theme/text_styles.dart';
+           ^
+    lib/features/settings/ui/settings_dialog.dart:6:8: Error: Error when reading 'lib/features/features/gamification/providers/gamification_service.dart': No such file or directory
+    import '../../features/gamification/providers/gamification_service.dart';
+           ^
+    lib/features/settings/ui/settings_dialog.dart:55:86: Error: Not a constant expression.
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.textSecondary),
+                                                                                         ^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:13:32: Error: The getter 'gamificationServiceProvider' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'gamificationServiceProvider'.
+        final progress = ref.watch(gamificationServiceProvider);
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:14:31: Error: The getter 'gamificationServiceProvider' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'gamificationServiceProvider'.
+        final notifier = ref.read(gamificationServiceProvider.notifier);
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:35:36: Error: The getter 'AppTextStyles' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppTextStyles'.
+                Text('Ayarlar', style: AppTextStyles.h2),
+                                       ^^^^^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:45:30: Error: The getter 'AppColors' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppColors'.
+                    activeColor: AppColors.primary,
+                                 ^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:66:43: Error: The getter 'AppTextStyles' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppTextStyles'.
+                  child: Text('Kapat', style: AppTextStyles.h3.copyWith(color: AppColors.primary)),
+                                              ^^^^^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:66:76: Error: The getter 'AppColors' isn't defined for the type 'SettingsDialog'.
+     - 'SettingsDialog' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppColors'.
+                  child: Text('Kapat', style: AppTextStyles.h3.copyWith(color: AppColors.primary)),
+                                                                               ^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:95:18: Error: The getter 'AppColors' isn't defined for the type '_SettingsTile'.
+     - '_SettingsTile' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppColors'.
+              color: AppColors.background,
+                     ^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:100:31: Error: The getter 'AppColors' isn't defined for the type '_SettingsTile'.
+     - '_SettingsTile' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppColors'.
+                Icon(icon, color: AppColors.textSecondary),
+                                  ^^^^^^^^^
+    lib/features/settings/ui/settings_dialog.dart:103:41: Error: The getter 'AppTextStyles' isn't defined for the type '_SettingsTile'.
+     - '_SettingsTile' is from 'package:rechen_welt/features/settings/ui/settings_dialog.dart' ('lib/features/settings/ui/settings_dialog.dart').
+    Try correcting the name to the name of an existing getter, or defining a getter or field named 'AppTextStyles'.
+                  child: Text(title, style: AppTextStyles.bodyMedium),
+                                            ^^^^^^^^^^^^^
+    lib/features/learning/ui/mistake_review_screen.dart:83:20: Error: Constant evaluation error:
+          return const Scaffold(
+                       ^
+    lib/features/learning/ui/mistake_review_screen.dart:85:82: Context: The invocation of 'h2' is not allowed in a constant expression.
+            body: Center(child: Text('Hata yok! Harikasın! 🎉', style: AppTextStyles.h2)),
+                                                                                     ^
+    Target kernel_snapshot_program failed: Exception
+    Failed to package /Users/sahingunes/Projects/mathe/rechen_welt.
+    Command PhaseScriptExecution failed with a nonzero exit code
+    note: Removed stale file '/Users/sahingunes/Library/Developer/Xcode/DerivedData/Runner-ghpcltcnmrrqrbawllqjnueuwfzq/Build/Intermediates.noindex/Runner.build/Release-iphoneos/Runner.build/DerivedSources/Entitlements.plist'
+
+    note: Removed stale file '/Users/sahingunes/Library/Developer/Xcode/DerivedData/Runner-ghpcltcnmrrqrbawllqjnueuwfzq/Build/Intermediates.noindex/Runner.build/Release-iphoneos/Runner.build/Runner.app.xcent'
+
+    note: Removed stale file '/Users/sahingunes/Library/Developer/Xcode/DerivedData/Runner-ghpcltcnmrrqrbawllqjnueuwfzq/Build/Intermediates.noindex/Runner.build/Release-iphoneos/Runner.build/Runner.app.xcent.der'
+
+    warning: Stale file '/Users/sahingunes/Projects/mathe/rechen_welt/build/ios/Release-iphoneos/Runner.app/_CodeSignature' is located outside of the allowed root paths.
+
+    warning: Stale file '/Users/sahingunes/Projects/mathe/rechen_welt/build/ios/Release-iphoneos/Runner.app/embedded.mobileprovision' is located outside of the allowed root paths.
+
+    note: Run script build phase 'Run Script' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+    note: Run script build phase 'Thin Binary' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+
+Encountered error while building for device.

@@ -7,6 +7,7 @@ class BouncyButton extends StatefulWidget {
   final Color? color;
   final double width;
   final double height;
+  final double scaleRatio;
 
   const BouncyButton({
     super.key,
@@ -15,6 +16,7 @@ class BouncyButton extends StatefulWidget {
     this.color,
     this.width = 200,
     this.height = 60,
+    this.scaleRatio = 0.95,
   });
 
   @override
@@ -35,7 +37,7 @@ class _BouncyButtonState extends State<BouncyButton> {
         duration: const Duration(milliseconds: 100),
         width: widget.width,
         height: widget.height,
-        transform: Matrix4.diagonal3Values(_isPressed ? 0.95 : 1.0, _isPressed ? 0.95 : 1.0, 1.0),
+        transform: Matrix4.diagonal3Values(_isPressed ? widget.scaleRatio : 1.0, _isPressed ? widget.scaleRatio : 1.0, 1.0),
         transformAlignment: Alignment.center,
         decoration: BoxDecoration(
           color: widget.color ?? Theme.of(context).primaryColor,

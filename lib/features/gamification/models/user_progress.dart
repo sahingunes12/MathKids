@@ -19,6 +19,8 @@ class UserProgress with _$UserProgress {
     @HiveField(8) @Default([]) List<String> ownedAccessories,
     @HiveField(9) String? id,
     @HiveField(10) @Default('') String name,
+    @HiveField(11) @Default([]) List<Map<String, dynamic>> mistakes,
+    @HiveField(12) @Default(true) bool isSoundEnabled,
   }) = _UserProgress;
 
   factory UserProgress.fromJson(Map<String, dynamic> json) =>

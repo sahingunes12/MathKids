@@ -28,10 +28,10 @@ class LearningModule {
 final List<LearningModule> allModules = [
   const LearningModule(
     id: 'addition_easy',
-    title: 'Modul 1: Zahlen',
-    subtitle: 'Addition bis 10',
-    icon: Icons.add_circle_rounded,
-    color: Color(0xFF6EC6FF),
+    title: 'Modül 1: Sayılar',
+    subtitle: '10\'a kadar Toplama',
+    icon: Icons.cookie_rounded, // 🍪
+    color: Color(0xFFFFB74D), // Orange
     exerciseType: ExerciseType.addition,
     maxNumber: 10,
     starsPerCorrect: 1,
@@ -39,10 +39,10 @@ final List<LearningModule> allModules = [
   ),
   const LearningModule(
     id: 'subtraction_easy',
-    title: 'Modul 2: Minus',
-    subtitle: 'Subtraktion bis 10',
-    icon: Icons.remove_circle_rounded,
-    color: Color(0xFFFF8A65),
+    title: 'Modül 2: Çıkarma',
+    subtitle: '10\'a kadar Çıkarma',
+    icon: Icons.bolt_rounded, // ⚡
+    color: Color(0xFFFF5252), // Red Accent
     exerciseType: ExerciseType.subtraction,
     maxNumber: 10,
     starsPerCorrect: 1,
@@ -50,10 +50,10 @@ final List<LearningModule> allModules = [
   ),
   const LearningModule(
     id: 'addition_hard',
-    title: 'Modul 3: Große Zahlen',
-    subtitle: 'Addition bis 20',
-    icon: Icons.add_box_rounded,
-    color: Color(0xFF81C784),
+    title: 'Modül 3: Büyük Sayılar',
+    subtitle: '20\'ye kadar Toplama',
+    icon: Icons.widgets_rounded, // 🧱
+    color: Color(0xFF66BB6A), // Green
     exerciseType: ExerciseType.addition,
     maxNumber: 20,
     starsPerCorrect: 2,
@@ -61,24 +61,58 @@ final List<LearningModule> allModules = [
   ),
   const LearningModule(
     id: 'multiplication_easy',
-    title: 'Modul 4: Malnehmen',
-    subtitle: 'Einmaleins Grundlagen',
-    icon: Icons.close_rounded,
-    color: Colors.purple,
+    title: 'Modül 4: Çarpma',
+    subtitle: 'Çarpım Tablosu (Kolay)',
+    icon: Icons.star_rounded, // ⭐
+    color: Color(0xFFE040FB), // Purple Accent
     exerciseType: ExerciseType.multiplication,
     maxNumber: 10,
     starsPerCorrect: 3,
     requiredStars: 50,
   ),
   const LearningModule(
+    id: 'division_easy', 
+    title: 'Modül 5: Bölme',
+    subtitle: 'Bölme İşlemi (Kolay)',
+    icon: Icons.pie_chart_rounded, // 🍕
+    color: Color(0xFFFF4081), // Pink Accent
+    exerciseType: ExerciseType.division,
+    maxNumber: 20,
+    starsPerCorrect: 4,
+    requiredStars: 70,
+  ),
+  // Kindergarten Modules
+  const LearningModule(
+    id: 'counting_easy',
+    title: 'Anaokulu: Sayma',
+    subtitle: 'Kaç tane var?',
+    icon: Icons.pets_rounded, // 🐾
+    color: Color(0xFF009688), // Teal
+    exerciseType: ExerciseType.counting,
+    maxNumber: 5,
+    starsPerCorrect: 2,
+    requiredStars: 0,
+  ),
+  const LearningModule(
+    id: 'shapes_basic',
+    title: 'Anaokulu: Şekiller',
+    subtitle: 'Şekilleri Tanı',
+    icon: Icons.emoji_objects_rounded, // 💡
+    color: Color(0xFFFFAB00), // Amber Accent
+    exerciseType: ExerciseType.shapes,
+    maxNumber: 4,
+    starsPerCorrect: 2,
+    requiredStars: 0,
+  ),
+  const LearningModule(
     id: 'multiplication_hard',
-    title: 'Modul 5: Profi-Mal',
-    subtitle: 'Schweres Einmaleins',
-    icon: Icons.grid_view_rounded,
-    color: Colors.indigo,
+    title: 'Modül 6: Usta Çarpma',
+    subtitle: 'Çarpım Tablosu (Zor)',
+    icon: Icons.diamond_rounded, // 💎
+    color: Color(0xFF3D5AFE), // Indigo Accent
     exerciseType: ExerciseType.multiplication,
     maxNumber: 20,
     starsPerCorrect: 5,
-    requiredStars: 80,
+    requiredStars: 100,
   ),
 ];

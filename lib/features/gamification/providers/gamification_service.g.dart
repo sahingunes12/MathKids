@@ -7,7 +7,7 @@ part of 'gamification_service.dart';
 // **************************************************************************
 
 String _$gamificationServiceHash() =>
-    r'd9d7597797bddb65c07002202582be0f5b5949c8';
+    r'ea5cc6a93ef9b2797f1f54f2b0a8d953cbe1a3a2';
 
 /// See also [GamificationService].
 @ProviderFor(GamificationService)

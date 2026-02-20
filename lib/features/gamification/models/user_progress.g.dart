@@ -28,13 +28,17 @@ class UserProgressAdapter extends TypeAdapter<UserProgress> {
       ownedAccessories: (fields[8] as List).cast<String>(),
       id: fields[9] as String?,
       name: fields[10] as String,
+      mistakes: (fields[11] as List)
+          .map((dynamic e) => (e as Map).cast<String, dynamic>())
+          .toList(),
+      isSoundEnabled: fields[12] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserProgress obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.totalStars)
       ..writeByte(1)
@@ -56,7 +60,11 @@ class UserProgressAdapter extends TypeAdapter<UserProgress> {
       ..writeByte(9)
       ..write(obj.id)
       ..writeByte(10)
-      ..write(obj.name);
+      ..write(obj.name)
+      ..writeByte(11)
+      ..write(obj.mistakes)
+      ..writeByte(12)
+      ..write(obj.isSoundEnabled);
   }
 
   @override
@@ -95,6 +103,11 @@ _$UserProgressImpl _$$UserProgressImplFromJson(Map<String, dynamic> json) =>
           const [],
       id: json['id'] as String?,
       name: json['name'] as String? ?? '',
+      mistakes: (json['mistakes'] as List<dynamic>?)
+              ?.map((e) => e as Map<String, dynamic>)
+              .toList() ??
+          const [],
+      isSoundEnabled: json['isSoundEnabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$UserProgressImplToJson(_$UserProgressImpl instance) =>
@@ -110,4 +123,6 @@ Map<String, dynamic> _$$UserProgressImplToJson(_$UserProgressImpl instance) =>
       'ownedAccessories': instance.ownedAccessories,
       'id': instance.id,
       'name': instance.name,
+      'mistakes': instance.mistakes,
+      'isSoundEnabled': instance.isSoundEnabled,
     };

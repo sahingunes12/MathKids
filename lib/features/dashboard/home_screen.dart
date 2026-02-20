@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import '../../app/theme/colors.dart';
-import '../../app/theme/text_styles.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/debug_log.dart';
 import '../../core/widgets/bouncy_button.dart';
-import '../../core/widgets/cloud_card.dart';
 import '../gamification/providers/gamification_service.dart';
 import '../gamification/widgets/feedback_overlay.dart';
 import '../gamification/widgets/star_display.dart';
+import '../gamification/models/user_progress.dart';
 import '../learning/models/module.dart';
 import '../learning/ui/quiz_screen.dart';
+import '../learning/ui/time_attack_screen.dart';
+import '../learning/ui/mistake_review_screen.dart';
+import '../settings/ui/settings_dialog.dart';
+import 'dashboard_theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -49,106 +52,90 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     debugPrint('🏠 HomeScreen: build called');
-    // #region agent log
     debugLog('home_screen.dart:build', 'HomeScreen building', {}, hypothesisId: 'H5');
-    // #endregion
     final progress = ref.watch(gamificationServiceProvider);
-    debugPrint('🏠 HomeScreen: progress received (stars: ${progress.totalStars})');
-    final unlockedModules = progress.unlockedModules;
 
     return FeedbackOverlay(
       confettiController: _confettiController,
       child: Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: AppBar(
-          title: Text('RechenWelt', style: AppTextStyles.h2),
-          centerTitle: true,
-          actions: const [
-            StarDisplay(),
-            SizedBox(width: 16),
-          ],
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Welcome header
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Willkommen, ${progress.name}! 👋',
-                            style: AppTextStyles.h1,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ).animate().fadeIn().moveX(begin: -20, end: 0),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Level ${progress.currentLevel} · ${progress.totalStars} ⭐',
-                            style: AppTextStyles.bodyMedium,
-                          ).animate().fadeIn(delay: 100.ms),
-                        ],
-                      ),
+        backgroundColor: DashboardTheme.surface,
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                DashboardTheme.surfaceGradientStart,
+                DashboardTheme.surfaceGradientEnd,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                _buildAppBar(context),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildHeroCard(progress),
+                        const SizedBox(height: 20),
+                        _buildSectionLabel('Hızlı Erişim'),
+                        const SizedBox(height: 12),
+                        _buildQuickActions(context),
+                        const SizedBox(height: 28),
+                        _buildSectionLabel('Oyun Alanı'),
+                        const SizedBox(height: 12),
+                        _buildGameCards(context, progress),
+                        const SizedBox(height: 28),
+                        _buildSectionLabel('Modüller'),
+                        const SizedBox(height: 12),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.switch_account_rounded, color: AppColors.primary),
-                      onPressed: () => context.go('/profile-selection'),
-                      tooltip: 'Profil Değiştir',
-                    ),
-                  ],
+                  ),
                 ),
-
-                const SizedBox(height: 16),
-                
-                // New Action Buttons
-                Row(
-                  children: [
-                    _ActionButton(
-                      icon: Icons.shopping_basket_rounded,
-                      label: 'Dükkan',
-                      color: AppColors.accent,
-                      onTap: () => context.push('/shop'),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverGrid(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.88,
+                      crossAxisSpacing: 14,
+                      mainAxisSpacing: 14,
                     ),
-                    const SizedBox(width: 12),
-                    _ActionButton(
-                      icon: Icons.analytics_rounded,
-                      label: 'Analiz',
-                      color: AppColors.primary,
-                      onTap: () => context.push('/stats'),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final module = allModules[index];
+                        final isUnlocked = progress.unlockedModules.contains(module.id);
+                        return _DashboardModuleCard(
+                          module: module,
+                          isUnlocked: isUnlocked,
+                          onTap: isUnlocked
+                              ? () => _openModule(module)
+                              : () {
+                                  ScaffoldMessenger.of(context).clearSnackBars();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Bu modül için ${module.requiredStars} ⭐ gerekli!'),
+                                      backgroundColor: DashboardTheme.accentMistakes,
+                                      behavior: SnackBarBehavior.floating,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(DashboardTheme.radiusSm),
+                                      ),
+                                    ),
+                                  );
+                                },
+                        ).animate().scale(delay: Duration(milliseconds: 80 * index));
+                      },
+                      childCount: allModules.length,
                     ),
-                  ],
-                ).animate().fadeIn(delay: 150.ms),
-
-                const SizedBox(height: 28),
-
-                Text(
-                  'Module',
-                  style: AppTextStyles.h3,
-                ).animate().fadeIn(delay: 150.ms),
-
-                const SizedBox(height: 12),
-
-                // Module cards
-                ...allModules.asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final module = entry.value;
-                  final isUnlocked = unlockedModules.contains(module.id);
-
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _ModuleCard(
-                      module: module,
-                      isUnlocked: isUnlocked,
-                      onStart: isUnlocked ? () => _openModule(module) : null,
-                    ).animate().fadeIn(delay: Duration(milliseconds: 200 + i * 100)).moveY(begin: 20, end: 0),
-                  );
-                }),
+                  ),
+                ),
+                const SliverPadding(padding: EdgeInsets.only(bottom: 40)),
               ],
             ),
           ),
@@ -156,15 +143,241 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
+
+  Widget _buildAppBar(BuildContext context) {
+    return SliverAppBar(
+      floating: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(
+        'RechenWelt',
+        style: GoogleFonts.outfit(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: DashboardTheme.primaryDark,
+          letterSpacing: 0.5,
+        ),
+      ),
+      centerTitle: true,
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BouncyButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => const SettingsDialog(),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: DashboardTheme.cardBg,
+              borderRadius: BorderRadius.circular(DashboardTheme.radiusMd),
+              boxShadow: DashboardTheme.cardShadow,
+            ),
+            child: Icon(
+              Icons.tune_rounded,
+              color: DashboardTheme.textSecondary,
+              size: 22,
+            ),
+          ),
+        ),
+      ),
+      actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: 12.0),
+          child: StarDisplay(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionLabel(String label) {
+    return Text(
+      label,
+      style: GoogleFonts.outfit(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: DashboardTheme.textPrimary,
+      ),
+    ).animate().fadeIn();
+  }
+
+  Widget _buildHeroCard(UserProgress progress) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: DashboardTheme.cardBg,
+        borderRadius: BorderRadius.circular(DashboardTheme.radiusXl),
+        border: Border.all(color: DashboardTheme.cardBorder, width: 1),
+        boxShadow: DashboardTheme.cardShadow,
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [DashboardTheme.primaryLight, DashboardTheme.primaryDark],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: const CircleAvatar(
+              radius: 30,
+              backgroundColor: DashboardTheme.surface,
+              child: Text('🦄', style: TextStyle(fontSize: 32)),
+            ),
+          ).animate().shake(delay: 500.ms),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Merhaba,',
+                  style: GoogleFonts.outfit(
+                    fontSize: 14,
+                    color: DashboardTheme.textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  progress.name,
+                  style: GoogleFonts.outfit(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: DashboardTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    _DashboardChip(
+                      icon: Icons.workspace_premium_rounded,
+                      label: 'Seviye ${progress.currentLevel}',
+                      color: DashboardTheme.chipLevel,
+                    ),
+                    const SizedBox(width: 8),
+                    _DashboardChip(
+                      icon: Icons.local_fire_department_rounded,
+                      label: '${progress.currentStreak} Gün',
+                      color: DashboardTheme.chipStreak,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ).animate().slideX(begin: -0.05, end: 0);
+  }
+
+  Widget _buildQuickActions(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _DashboardActionButton(
+            icon: Icons.shopping_bag_rounded,
+            label: 'Dükkan',
+            color: DashboardTheme.accentShop,
+            onTap: () => context.push('/shop'),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _DashboardActionButton(
+            icon: Icons.insights_rounded,
+            label: 'Analiz',
+            color: DashboardTheme.accentStats,
+            onTap: () => context.push('/stats'),
+          ),
+        ),
+      ],
+    ).animate().scale(delay: 150.ms);
+  }
+
+  Widget _buildGameCards(BuildContext context, UserProgress progress) {
+    return Row(
+      children: [
+        Expanded(
+          child: _DashboardGameCard(
+            title: 'Zamana\nKarşı',
+            icon: Icons.speed_rounded,
+            color: DashboardTheme.accentTimeAttack,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const TimeAttackScreen()),
+            ),
+          ),
+        ),
+        if (progress.mistakes.isNotEmpty) ...[
+          const SizedBox(width: 12),
+          Expanded(
+            child: _DashboardGameCard(
+              title: 'Hataları\nÇöz',
+              icon: Icons.error_outline_rounded,
+              color: DashboardTheme.accentMistakes,
+              showBadge: true,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const MistakeReviewScreen()),
+              ),
+            ),
+          ),
+        ],
+      ],
+    ).animate().slideY(begin: 0.15, end: 0, delay: 250.ms);
+  }
 }
 
-class _ActionButton extends StatelessWidget {
+class _DashboardChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _DashboardChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(DashboardTheme.radiusSm),
+        border: Border.all(color: color.withOpacity(0.25)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: GoogleFonts.outfit(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DashboardActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
   final VoidCallback onTap;
 
-  const _ActionButton({
+  const _DashboardActionButton({
     required this.icon,
     required this.label,
     required this.color,
@@ -173,19 +386,28 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BouncyButton(
-        onPressed: onTap,
-        color: color,
-        height: 54,
+    return BouncyButton(
+      onPressed: onTap,
+      scaleRatio: 0.97,
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(DashboardTheme.radiusMd),
+          boxShadow: DashboardTheme.buttonShadow(color),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(width: 8),
+            Icon(icon, color: DashboardTheme.textOnPrimary, size: 24),
+            const SizedBox(width: 10),
             Text(
               label,
-              style: AppTextStyles.h3.copyWith(color: Colors.white, fontSize: 16),
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: DashboardTheme.textOnPrimary,
+              ),
             ),
           ],
         ),
@@ -194,25 +416,117 @@ class _ActionButton extends StatelessWidget {
   }
 }
 
-class _ModuleCard extends StatelessWidget {
-  final LearningModule module;
-  final bool isUnlocked;
-  final VoidCallback? onStart;
+class _DashboardGameCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final bool showBadge;
+  final VoidCallback onTap;
 
-  const _ModuleCard({
-    required this.module,
-    required this.isUnlocked,
-    required this.onStart,
+  const _DashboardGameCard({
+    required this.title,
+    required this.icon,
+    required this.color,
+    this.showBadge = false,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CloudCard(
-      child: Opacity(
-        opacity: isUnlocked ? 1.0 : 0.6,
-        child: Row(
+    return BouncyButton(
+      onPressed: onTap,
+      child: Container(
+        height: 110,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(DashboardTheme.radiusLg),
+          boxShadow: DashboardTheme.buttonShadow(color),
+        ),
+        child: Stack(
           children: [
-            // Icon circle
+            Positioned(
+              right: -4,
+              bottom: -4,
+              child: Icon(icon, size: 64, color: Colors.white.withOpacity(0.2)),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(DashboardTheme.radiusSm),
+                      ),
+                      child: Icon(icon, color: Colors.white, size: 24),
+                    ),
+                    if (showBadge)
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black26, blurRadius: 4),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DashboardModuleCard extends StatelessWidget {
+  final LearningModule module;
+  final bool isUnlocked;
+  final VoidCallback onTap;
+
+  const _DashboardModuleCard({
+    required this.module,
+    required this.isUnlocked,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = isUnlocked ? DashboardTheme.cardBg : DashboardTheme.surface;
+    final borderColor = isUnlocked ? DashboardTheme.cardBorder : DashboardTheme.cardBorder.withOpacity(0.6);
+    final iconColor = isUnlocked ? module.color : DashboardTheme.textSecondary;
+
+    return BouncyButton(
+      onPressed: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(DashboardTheme.radiusLg),
+          border: Border.all(color: borderColor),
+          boxShadow: DashboardTheme.cardShadow,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Stack(
               alignment: Alignment.center,
               children: [
@@ -220,52 +534,28 @@ class _ModuleCard extends StatelessWidget {
                   width: 56,
                   height: 56,
                   decoration: BoxDecoration(
-                    color: module.color.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
+                    color: iconColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(DashboardTheme.radiusMd),
                   ),
-                  child: Icon(
-                    isUnlocked ? module.icon : Icons.lock_outline_rounded,
-                    color: isUnlocked ? module.color : AppColors.textSecondary,
-                    size: 28,
-                  ),
+                ),
+                Icon(
+                  isUnlocked ? module.icon : Icons.lock_rounded,
+                  size: 28,
+                  color: iconColor,
                 ),
               ],
             ),
-            const SizedBox(width: 16),
-
-            // Title + subtitle
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(module.title, style: AppTextStyles.h3),
-                  const SizedBox(height: 2),
-                  Text(
-                    isUnlocked 
-                      ? module.subtitle 
-                      : 'Noch ${module.requiredStars} ⭐ benötigt',
-                    style: AppTextStyles.bodyMedium,
-                  ),
-                ],
+            const SizedBox(height: 12),
+            Text(
+              module.title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: isUnlocked ? DashboardTheme.textPrimary : DashboardTheme.textSecondary,
               ),
-            ),
-
-            const SizedBox(width: 12),
-
-            // Start button
-            BouncyButton(
-              width: 100,
-              height: 44,
-              color: isUnlocked ? module.color : AppColors.disabled,
-              onPressed: onStart ?? () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Sammle ${module.requiredStars} ⭐ um dieses Modul zu öffnen!'),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
-              child: Text(isUnlocked ? 'Starten' : 'Kilitli'),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

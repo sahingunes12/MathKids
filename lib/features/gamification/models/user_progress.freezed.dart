@@ -42,6 +42,10 @@ mixin _$UserProgress {
   String? get id => throw _privateConstructorUsedError;
   @HiveField(10)
   String get name => throw _privateConstructorUsedError;
+  @HiveField(11)
+  List<Map<String, dynamic>> get mistakes => throw _privateConstructorUsedError;
+  @HiveField(12)
+  bool get isSoundEnabled => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +70,9 @@ abstract class $UserProgressCopyWith<$Res> {
       @HiveField(7) int totalWrong,
       @HiveField(8) List<String> ownedAccessories,
       @HiveField(9) String? id,
-      @HiveField(10) String name});
+      @HiveField(10) String name,
+      @HiveField(11) List<Map<String, dynamic>> mistakes,
+      @HiveField(12) bool isSoundEnabled});
 }
 
 /// @nodoc
@@ -93,6 +99,8 @@ class _$UserProgressCopyWithImpl<$Res, $Val extends UserProgress>
     Object? ownedAccessories = null,
     Object? id = freezed,
     Object? name = null,
+    Object? mistakes = null,
+    Object? isSoundEnabled = null,
   }) {
     return _then(_value.copyWith(
       totalStars: null == totalStars
@@ -139,6 +147,14 @@ class _$UserProgressCopyWithImpl<$Res, $Val extends UserProgress>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      mistakes: null == mistakes
+          ? _value.mistakes
+          : mistakes // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>,
+      isSoundEnabled: null == isSoundEnabled
+          ? _value.isSoundEnabled
+          : isSoundEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -162,7 +178,9 @@ abstract class _$$UserProgressImplCopyWith<$Res>
       @HiveField(7) int totalWrong,
       @HiveField(8) List<String> ownedAccessories,
       @HiveField(9) String? id,
-      @HiveField(10) String name});
+      @HiveField(10) String name,
+      @HiveField(11) List<Map<String, dynamic>> mistakes,
+      @HiveField(12) bool isSoundEnabled});
 }
 
 /// @nodoc
@@ -187,6 +205,8 @@ class __$$UserProgressImplCopyWithImpl<$Res>
     Object? ownedAccessories = null,
     Object? id = freezed,
     Object? name = null,
+    Object? mistakes = null,
+    Object? isSoundEnabled = null,
   }) {
     return _then(_$UserProgressImpl(
       totalStars: null == totalStars
@@ -233,6 +253,14 @@ class __$$UserProgressImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
+      mistakes: null == mistakes
+          ? _value._mistakes
+          : mistakes // ignore: cast_nullable_to_non_nullable
+              as List<Map<String, dynamic>>,
+      isSoundEnabled: null == isSoundEnabled
+          ? _value.isSoundEnabled
+          : isSoundEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -252,9 +280,12 @@ class _$UserProgressImpl implements _UserProgress {
       @HiveField(7) this.totalWrong = 0,
       @HiveField(8) final List<String> ownedAccessories = const [],
       @HiveField(9) this.id,
-      @HiveField(10) this.name = ''})
+      @HiveField(10) this.name = '',
+      @HiveField(11) final List<Map<String, dynamic>> mistakes = const [],
+      @HiveField(12) this.isSoundEnabled = true})
       : _unlockedModules = unlockedModules,
-        _ownedAccessories = ownedAccessories;
+        _ownedAccessories = ownedAccessories,
+        _mistakes = mistakes;
 
   factory _$UserProgressImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserProgressImplFromJson(json);
@@ -314,10 +345,24 @@ class _$UserProgressImpl implements _UserProgress {
   @JsonKey()
   @HiveField(10)
   final String name;
+  final List<Map<String, dynamic>> _mistakes;
+  @override
+  @JsonKey()
+  @HiveField(11)
+  List<Map<String, dynamic>> get mistakes {
+    if (_mistakes is EqualUnmodifiableListView) return _mistakes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_mistakes);
+  }
+
+  @override
+  @JsonKey()
+  @HiveField(12)
+  final bool isSoundEnabled;
 
   @override
   String toString() {
-    return 'UserProgress(totalStars: $totalStars, currentLevel: $currentLevel, diamonds: $diamonds, currentStreak: $currentStreak, unlockedModules: $unlockedModules, lastPlayedDate: $lastPlayedDate, totalCorrect: $totalCorrect, totalWrong: $totalWrong, ownedAccessories: $ownedAccessories, id: $id, name: $name)';
+    return 'UserProgress(totalStars: $totalStars, currentLevel: $currentLevel, diamonds: $diamonds, currentStreak: $currentStreak, unlockedModules: $unlockedModules, lastPlayedDate: $lastPlayedDate, totalCorrect: $totalCorrect, totalWrong: $totalWrong, ownedAccessories: $ownedAccessories, id: $id, name: $name, mistakes: $mistakes, isSoundEnabled: $isSoundEnabled)';
   }
 
   @override
@@ -344,7 +389,10 @@ class _$UserProgressImpl implements _UserProgress {
             const DeepCollectionEquality()
                 .equals(other._ownedAccessories, _ownedAccessories) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name));
+            (identical(other.name, name) || other.name == name) &&
+            const DeepCollectionEquality().equals(other._mistakes, _mistakes) &&
+            (identical(other.isSoundEnabled, isSoundEnabled) ||
+                other.isSoundEnabled == isSoundEnabled));
   }
 
   @JsonKey(ignore: true)
@@ -361,7 +409,9 @@ class _$UserProgressImpl implements _UserProgress {
       totalWrong,
       const DeepCollectionEquality().hash(_ownedAccessories),
       id,
-      name);
+      name,
+      const DeepCollectionEquality().hash(_mistakes),
+      isSoundEnabled);
 
   @JsonKey(ignore: true)
   @override
@@ -389,7 +439,9 @@ abstract class _UserProgress implements UserProgress {
       @HiveField(7) final int totalWrong,
       @HiveField(8) final List<String> ownedAccessories,
       @HiveField(9) final String? id,
-      @HiveField(10) final String name}) = _$UserProgressImpl;
+      @HiveField(10) final String name,
+      @HiveField(11) final List<Map<String, dynamic>> mistakes,
+      @HiveField(12) final bool isSoundEnabled}) = _$UserProgressImpl;
 
   factory _UserProgress.fromJson(Map<String, dynamic> json) =
       _$UserProgressImpl.fromJson;
@@ -427,6 +479,12 @@ abstract class _UserProgress implements UserProgress {
   @override
   @HiveField(10)
   String get name;
+  @override
+  @HiveField(11)
+  List<Map<String, dynamic>> get mistakes;
+  @override
+  @HiveField(12)
+  bool get isSoundEnabled;
   @override
   @JsonKey(ignore: true)
   _$$UserProgressImplCopyWith<_$UserProgressImpl> get copyWith =>

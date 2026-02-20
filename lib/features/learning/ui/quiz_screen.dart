@@ -9,6 +9,7 @@ import '../../gamification/providers/gamification_service.dart';
 import '../../gamification/widgets/feedback_overlay.dart';
 import '../../../core/services/audio_service.dart';
 import '../models/module.dart';
+import '../models/exercise.dart';
 import '../providers/quiz_provider.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {
@@ -166,15 +167,57 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           ),
         ],
       ),
-      child: Text(
-        exercise.questionText,
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-          fontSize: 52,
-          fontWeight: FontWeight.w800,
-          color: AppColors.textPrimary,
-          letterSpacing: -1,
-        ),
+      child: _buildQuestion(exercise),
+    );
+  }
+
+  Widget _buildQuestion(Exercise exercise) {
+    if (exercise.type == ExerciseType.counting) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(exercise.questionText, style: AppTextStyles.h2),
+          const SizedBox(height: 24),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
+            children: List<Widget>.generate(exercise.operandA, (index) {
+              return Icon(
+                exercise.questionIcon ?? Icons.star_rounded,
+                size: 64,
+                color: exercise.questionColor ?? AppColors.primary,
+              ).animate().scale(delay: Duration(milliseconds: 100 * index));
+            }),
+          ),
+        ],
+      );
+    } else if (exercise.type == ExerciseType.shapes) {
+      final shapes = [Icons.circle, Icons.square_rounded, Icons.change_history_rounded, Icons.star_rounded];
+      final shapeIcon = shapes[exercise.correctAnswer % shapes.length];
+      
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(exercise.questionText, style: AppTextStyles.h2),
+          const SizedBox(height: 24),
+          Icon(
+             shapeIcon,
+             size: 120,
+             color: exercise.questionColor ?? Colors.purpleAccent,
+          ).animate().scale().shimmer(),
+        ],
+      );
+    }
+
+    return Text(
+      exercise.questionText,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 52,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textPrimary,
+        letterSpacing: -1,
       ),
     );
   }
@@ -188,11 +231,35 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       mainAxisSpacing: 16,
       childAspectRatio: 2.2,
       children: exercise.choices.map<Widget>((choice) {
+        Widget content;
+        if (exercise.type == ExerciseType.shapes) {
+           final shapes = [Icons.circle, Icons.square_rounded, Icons.change_history_rounded, Icons.star_rounded];
+           content = Icon(
+             shapes[choice % shapes.length],
+             size: 40,
+             color: state.selectedAnswer == choice || (state.isAnswered && choice == exercise.correctAnswer) 
+               ? Colors.white 
+               : AppColors.textPrimary,
+           );
+        } else {
+           content = Text(
+            '$choice',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: state.selectedAnswer == choice || (state.isAnswered && choice == exercise.correctAnswer)
+                  ? Colors.white
+                  : AppColors.textPrimary,
+            ),
+          );
+        }
+
         return _ChoiceButton(
           value: choice,
           correctAnswer: exercise.correctAnswer,
           selectedAnswer: state.selectedAnswer,
           onTap: state.isAnswered ? null : () => _onAnswer(choice),
+          child: content,
         );
       }).toList(),
     );
@@ -213,14 +280,14 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  correct == total ? '🎉 Super!' : correct >= total ~/ 2 ? '👍 Gut!' : '💪 Weiter üben!',
+                  correct == total ? '🎉 Harika!' : correct >= total ~/ 2 ? '👍 İyi!' : '💪 Devam Et!',
                   style: const TextStyle(fontSize: 48),
                 ).animate().scale(),
 
                 const SizedBox(height: 24),
 
                 Text(
-                  '$correct / $total richtig',
+                  '$correct / $total doğru',
                   style: AppTextStyles.h1,
                 ).animate().fadeIn(delay: 200.ms),
 
@@ -232,7 +299,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     const Text('⭐', style: TextStyle(fontSize: 32)),
                     const SizedBox(width: 8),
                     Text(
-                      '+$stars Sterne',
+                      '+$stars Yıldız',
                       style: AppTextStyles.h2.copyWith(color: AppColors.secondary),
                     ),
                   ],
@@ -245,7 +312,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                     _starsAwarded = false;
                     _quizNotifier.resetQuiz();
                   },
-                  child: const Text('Nochmal'),
+                  child: const Text('Tekrar'),
                 ).animate().fadeIn(delay: 600.ms),
 
                 const SizedBox(height: 16),
@@ -253,7 +320,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(
-                    'Zurück',
+                    'Çıkış',
                     style: AppTextStyles.bodyMedium,
                   ),
                 ).animate().fadeIn(delay: 700.ms),
@@ -271,12 +338,14 @@ class _ChoiceButton extends StatelessWidget {
   final int correctAnswer;
   final int? selectedAnswer;
   final VoidCallback? onTap;
+  final Widget? child; // Custom child for shapes
 
   const _ChoiceButton({
     required this.value,
     required this.correctAnswer,
     required this.selectedAnswer,
     required this.onTap,
+    this.child,
   });
 
   @override
@@ -287,7 +356,6 @@ class _ChoiceButton extends StatelessWidget {
 
     Color bgColor = Colors.white;
     Color textColor = AppColors.textPrimary;
-    const Color borderColor = Colors.transparent;
 
     if (isAnswered) {
       if (isCorrect) {
@@ -296,30 +364,26 @@ class _ChoiceButton extends StatelessWidget {
       } else if (isSelected) {
         bgColor = AppColors.wrong;
         textColor = Colors.white;
-      } else {
-        bgColor = Colors.white;
-        textColor = AppColors.disabled;
       }
     }
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: isAnswered ? null : onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: borderColor, width: 2),
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isAnswered ? 0.04 : 0.08),
-              blurRadius: 12,
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Center(
-          child: Text(
+          child: child ?? Text(
             '$value',
             style: TextStyle(
               fontSize: 28,

@@ -1,0 +1,188 @@
+Warning: Building for device with codesigning disabled. You will have to manually codesign before deploying to device.
+Building com.rechenwelt.rechenWelt for device (ios-release)...
+Running Xcode build...                                          
+Xcode build done.                                            4.5s
+Failed to build iOS app
+Error output from Xcode build:
+↳
+    ** BUILD FAILED **
+
+
+Xcode's output:
+↳
+    Writing result bundle at path:
+    	/var/folders/mr/c122_w_53hbc01pzvn18xp0m0000gn/T/flutter_tools.1JvVQa/flutter_ios_build_temp_dirXYe38p/temporary_xcresult_bundle
+
+    lib/features/learning/ui/quiz_screen.dart:162:20: Error: Can't find ')' to match '('.
+              BoxShadow(
+                       ^
+    lib/features/learning/ui/quiz_screen.dart:161:20: Error: Can't find ']' to match '['.
+            boxShadow: [
+                       ^
+    lib/features/learning/ui/quiz_screen.dart:158:32: Error: Can't find ')' to match '('.
+          decoration: BoxDecoration(
+                                   ^
+    lib/features/learning/ui/quiz_screen.dart:155:21: Error: Can't find ')' to match '('.
+        return Container(
+                        ^
+    lib/features/learning/ui/quiz_screen.dart:387:29: Error: Can't find ')' to match '('.
+                style: TextStyle(
+                                ^
+    lib/features/learning/ui/quiz_screen.dart:385:31: Error: Can't find ')' to match '('.
+              child: child ?? Text(
+                                  ^
+    lib/features/learning/ui/quiz_screen.dart:384:22: Error: Can't find ')' to match '('.
+            child: Center(
+                         ^
+    lib/features/learning/ui/quiz_screen.dart:371:31: Error: Can't find ')' to match '('.
+          child: AnimatedContainer(
+                                  ^
+    lib/features/learning/ui/quiz_screen.dart:369:27: Error: Can't find ')' to match '('.
+        return GestureDetector(
+                              ^
+    lib/features/learning/ui/quiz_screen.dart:335:45: Error: Can't find '}' to match '{'.
+    class _ChoiceButton extends StatelessWidget {
+                                                ^
+    lib/features/learning/ui/quiz_screen.dart:23:58: Error: Can't find '}' to match '{'.
+    class _QuizScreenState extends ConsumerState<QuizScreen> {
+                                                             ^
+    lib/features/learning/ui/quiz_screen.dart:335:1: Error: Classes can't be declared inside other classes.
+    Try moving the class to the top-level.
+    class _ChoiceButton extends StatelessWidget {
+    ^^^^^
+    lib/features/learning/ui/quiz_screen.dart:335:21: Error: Expected a class member, but got 'extends'.
+    class _ChoiceButton extends StatelessWidget {
+                        ^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:335:29: Error: A method declaration needs an explicit list of parameters.
+    Try adding a parameter list to the method declaration.
+    class _ChoiceButton extends StatelessWidget {
+                                ^^^^^^^^^^^^^^^
+    lib/features/learning/providers/exercise_generator.dart:96:5: Error: Expected a class member, but got 'while'.
+        while (choiceSet.length < 4) {
+        ^^^^^
+    lib/features/learning/providers/exercise_generator.dart:96:11: Error: Expected an identifier, but got '('.
+    Try inserting an identifier before '('.
+        while (choiceSet.length < 4) {
+              ^
+    lib/features/learning/providers/exercise_generator.dart:96:29: Error: Expected an identifier, but got '<'.
+    Try inserting an identifier before '<'.
+        while (choiceSet.length < 4) {
+                                ^
+    lib/features/learning/providers/exercise_generator.dart:96:31: Error: Expected ')' before this.
+        while (choiceSet.length < 4) {
+                                  ^
+    lib/features/learning/providers/exercise_generator.dart:104:5: Error: Expected a class member, but got 'return'.
+        return list;
+        ^^^^^^
+    lib/features/learning/providers/exercise_generator.dart:104:12: Error: Variables must be declared using the keywords 'const', 'final', 'var' or a type name.
+    Try adding the name of the type of the variable or the keyword 'var'.
+        return list;
+               ^^^^
+    lib/features/learning/providers/exercise_generator.dart:106:1: Error: Expected a declaration, but got '}'.
+    }
+    ^
+    lib/features/learning/providers/exercise_generator.dart:104:12: Error: 'list' is already declared in this scope.
+        return list;
+               ^^^^
+    lib/features/learning/providers/exercise_generator.dart:103:11: Context: Previous declaration of 'list'.
+        final list = choiceSet.toList()..shuffle(_random);
+              ^^^^
+    lib/features/learning/providers/exercise_generator.dart:96:12: Error: 'choiceSet.length' can't be used as a type because 'choiceSet' doesn't refer to an import prefix.
+        while (choiceSet.length < 4) {
+               ^^^^^^^^^^^^^^^^
+    lib/features/learning/providers/exercise_generator.dart:103:18: Error: Undefined name 'choiceSet'.
+        final list = choiceSet.toList()..shuffle(_random);
+                     ^^^^^^^^^
+    lib/features/learning/providers/exercise_generator.dart:103:46: Error: Can't access 'this' in a field initializer to read '_random'.
+        final list = choiceSet.toList()..shuffle(_random);
+                                                 ^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:86:18: Error: The method '_buildResultScreen' isn't defined for the type '_QuizScreenState'.
+     - '_QuizScreenState' is from 'package:rechen_welt/features/learning/ui/quiz_screen.dart' ('lib/features/learning/ui/quiz_screen.dart').
+    Try correcting the name to the name of an existing method, or defining a method named '_buildResultScreen'.
+              return _buildResultScreen(state);
+                     ^^^^^^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:130:17: Error: The method '_buildChoices' isn't defined for the type '_QuizScreenState'.
+     - '_QuizScreenState' is from 'package:rechen_welt/features/learning/ui/quiz_screen.dart' ('lib/features/learning/ui/quiz_screen.dart').
+    Try correcting the name to the name of an existing method, or defining a method named '_buildChoices'.
+                    _buildChoices(exercise, state),
+                    ^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:163:10: Error: A function expression can't have a name.
+      Widget _buildQuestion(Exercise exercise) {
+             ^^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:163:25: Error: 'Exercise' isn't a type.
+      Widget _buildQuestion(Exercise exercise) {
+                            ^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:224:3: Error: Expected ',' before this.
+      Widget _buildChoices(exercise, QuizState state) {
+      ^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:224:10: Error: A function expression can't have a name.
+      Widget _buildChoices(exercise, QuizState state) {
+             ^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:267:3: Error: Expected ',' before this.
+      Widget _buildResultScreen(QuizState state) {
+      ^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:267:10: Error: A function expression can't have a name.
+      Widget _buildResultScreen(QuizState state) {
+             ^^^^^^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:162:20: Error: Too many positional arguments: 0 allowed, but 3 found.
+    Try removing the extra positional arguments.
+              BoxShadow(
+                       ^
+    ../../../flutter/packages/flutter/lib/src/painting/box_shadow.dart:37:9: Context: Found this candidate, but the arguments don't match.
+      const BoxShadow({
+            ^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:332:3: Error: Expected ';' after this.
+      }
+      ^
+    lib/features/learning/ui/quiz_screen.dart:343:14: Error: Expected ',' before this.
+        required this.value,
+                 ^^^^
+    lib/features/learning/ui/quiz_screen.dart:344:14: Error: Expected ',' before this.
+        required this.correctAnswer,
+                 ^^^^
+    lib/features/learning/ui/quiz_screen.dart:345:14: Error: Expected ',' before this.
+        required this.selectedAnswer,
+                 ^^^^
+    lib/features/learning/ui/quiz_screen.dart:346:14: Error: Expected ',' before this.
+        required this.onTap,
+                 ^^^^
+    lib/features/learning/ui/quiz_screen.dart:342:9: Error: Not a constant expression.
+      const _ChoiceButton({
+            ^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:387:29: Error: Expected ';' after this.
+                style: TextStyle(
+                                ^
+    lib/features/learning/ui/quiz_screen.dart:352:24: Error: Final variable 'selectedAnswer' must be assigned before it can be used.
+        final isSelected = selectedAnswer == value;
+                           ^^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:352:42: Error: Final variable 'value' must be assigned before it can be used.
+        final isSelected = selectedAnswer == value;
+                                             ^^^^^
+    lib/features/learning/ui/quiz_screen.dart:353:24: Error: Final variable 'selectedAnswer' must be assigned before it can be used.
+        final isAnswered = selectedAnswer != null;
+                           ^^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:354:23: Error: Final variable 'value' must be assigned before it can be used.
+        final isCorrect = value == correctAnswer;
+                          ^^^^^
+    lib/features/learning/ui/quiz_screen.dart:354:32: Error: Final variable 'correctAnswer' must be assigned before it can be used.
+        final isCorrect = value == correctAnswer;
+                                   ^^^^^^^^^^^^^
+    lib/features/learning/ui/quiz_screen.dart:370:34: Error: Final variable 'onTap' must be assigned before it can be used.
+          onTap: isAnswered ? null : onTap,
+                                     ^^^^^
+    lib/features/learning/ui/quiz_screen.dart:385:18: Error: Final variable 'child' must be assigned before it can be used.
+              child: child ?? Text(
+                     ^^^^^
+    lib/features/learning/ui/quiz_screen.dart:386:15: Error: Final variable 'value' must be assigned before it can be used.
+                '$value',
+                  ^^^^^
+    lib/features/learning/models/module.dart:100:17: Error: Member not found: 'shapes_rounded'.
+        icon: Icons.shapes_rounded,
+                    ^^^^^^^^^^^^^^
+    Target kernel_snapshot_program failed: Exception
+    Failed to package /Users/sahingunes/Projects/mathe/rechen_welt.
+    Command PhaseScriptExecution failed with a nonzero exit code
+    note: Run script build phase 'Run Script' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+    note: Run script build phase 'Thin Binary' will be run during every build because the option to run the script phase "Based on dependency analysis" is unchecked. (in target 'Runner' from project 'Runner')
+
+Encountered error while building for device.
